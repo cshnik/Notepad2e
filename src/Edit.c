@@ -501,22 +501,18 @@ char *EditGetClipboardText(HWND hwnd)
 //
 BOOL EditCopyAppend(HWND hwnd)
 {
-  HANDLE hOld;
-  WCHAR  *pszOld;
+  HANDLE hOld = NULL;
+  WCHAR  *pszOld = L"";
   HANDLE hNew;
   WCHAR  *pszNew;
   char  *pszText;
   int   cchTextW;
   WCHAR *pszTextW;
-  WCHAR *pszSep = L"\r\n";
+  const BOOL bClipboardDataAvailable = IsClipboardFormatAvailable(CF_UNICODETEXT);
+  const WCHAR *pszSep = bClipboardDataAvailable ? L"\r\n" : L"";
   UINT  uCodePage;
   int iCurPos;
   int iAnchorPos;
-  if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
-  {
-    SendMessage(hwnd, SCI_COPY, 0, 0);
-    return (TRUE);
-  }
   iCurPos = (int)SendMessage(hwnd, SCI_GETCURRENTPOS, 0, 0);
   iAnchorPos = (int)SendMessage(hwnd, SCI_GETANCHOR, 0, 0);
   if (iCurPos != iAnchorPos)
@@ -574,15 +570,21 @@ BOOL EditCopyAppend(HWND hwnd)
     LocalFree(pszTextW);
     return (FALSE);
   }
-  hOld = GetClipboardData(CF_UNICODETEXT);
-  pszOld = GlobalLock(hOld);
+  if (bClipboardDataAvailable)
+  {
+    hOld = GetClipboardData(CF_UNICODETEXT);
+    pszOld = GlobalLock(hOld);
+  }
   hNew = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT,
                      sizeof(WCHAR) * (lstrlen(pszOld) + lstrlen(pszTextW) + 1));
   pszNew = GlobalLock(hNew);
   lstrcpy(pszNew, pszOld);
   lstrcat(pszNew, pszTextW);
   GlobalUnlock(hNew);
-  GlobalUnlock(hOld);
+  if (bClipboardDataAvailable)
+  {
+    GlobalUnlock(hOld);
+  }
   EmptyClipboard();
   SetClipboardData(CF_UNICODETEXT, hNew);
   CloseClipboard();
@@ -2884,6 +2886,65 @@ void EditMoveDown(HWND hwnd)
   {
     MsgBox(MBINFO, IDS_SELRECT);
   }
+}
+
+extern BOOL bAutoIndent;
+
+void EditInsertNewLine(HWND hwnd, BOOL insertAbove)
+{
+  const int iCurPos = SendMessage(hwnd, SCI_GETCURRENTPOS, 0, 0);
+  const int iCurLine = SendMessage(hwnd, SCI_LINEFROMPOSITION, (WPARAM)iCurPos, 0);
+  SendMessage(hwndEdit, SCI_BEGINUNDOACTION, 0, 0);
+  const int iPrevLine = (iCurLine > 0) ? iCurLine - 1 : 0;
+  if (insertAbove)
+  {
+    if (bAutoIndent)
+    {
+      const BOOL isLineStart = (iCurPos == SendMessage(hwndEdit, SCI_POSITIONFROMLINE, iCurLine, 0));
+      if (isLineStart)
+      {
+        const int prevLineEndPos = SendMessage(hwnd, SCI_GETLINEENDPOSITION, iPrevLine, 0);
+        SendMessage(hwndEdit, SCI_SETSEL, prevLineEndPos, prevLineEndPos);
+        SendMessage(hwndEdit, SCI_NEWLINE, 0, 0);
+      }
+      else
+      {
+        SendMessage(hwndEdit, SCI_NEWLINE, 0, 0);
+        const int prevLineEndPos = SendMessage(hwnd, SCI_GETLINEENDPOSITION, iCurLine, 0);
+        SendMessage(hwndEdit, SCI_SETSEL, prevLineEndPos, prevLineEndPos);
+      }
+    }
+    else
+    {
+      const int prevLineEndPos = SendMessage(hwnd, SCI_GETLINEENDPOSITION, iPrevLine, 0);
+      SendMessage(hwndEdit, SCI_SETSEL, prevLineEndPos, prevLineEndPos);
+      SendMessage(hwndEdit, SCI_NEWLINE, 0, 0);
+    }
+  }
+  else
+  {
+    if (bAutoIndent)
+    {
+      const BOOL isLineEnd = (iCurPos == SendMessage(hwnd, SCI_GETLINEENDPOSITION, iCurLine, 0));
+      if (isLineEnd)
+      {
+        const int iIndentColOriginal = SendMessage(hwndEdit, SCI_GETLINEINDENTATION, iCurLine, 0);
+        const int iIndentColLinePrev = SendMessage(hwndEdit, SCI_GETLINEINDENTATION, iPrevLine, 0);
+        SendMessage(hwndEdit, SCI_SETLINEINDENTATION, iCurLine, iIndentColLinePrev);
+        SendMessage(hwndEdit, SCI_NEWLINE, 0, 0);
+        SendMessage(hwndEdit, SCI_SETLINEINDENTATION, iCurLine, iIndentColOriginal);
+      }
+      else
+      {
+        SendMessage(hwndEdit, SCI_NEWLINE, 0, 0);
+      }
+    }
+    else
+    {
+      SendMessage(hwndEdit, SCI_NEWLINE, 0, 0);
+    }
+  }
+  SendMessage(hwndEdit, SCI_ENDUNDOACTION, 0, 0);
 }
 
 //=============================================================================
@@ -5649,6 +5710,11 @@ int FindTextTest(const HWND hwnd, const int searchFlags, const struct TextToFind
   return FindTextImpl(hwnd, searchFlags, &ttf);
 }
 
+BOOL CheckTextExists(const HWND hwnd, const int searchFlags, const struct TextToFind* pttf, const int iPos)
+{
+  return (FindTextTest(hwnd, searchFlags, pttf, iPos) >= 0);
+}
+
 //=============================================================================
 //
 //  EditFindNext()
@@ -5681,14 +5747,14 @@ BOOL EditFindNext(HWND hwnd, LPCEDITFINDREPLACE lpefr, BOOL fExtendSelection)
   ttf.lpstrText = szFind2;
   iPos = FindTextImpl(hwnd, lpefr->fuFlags, &ttf);
   const BOOL bTextFound = (iPos >= 0);
-  UpdateFindIcon(bTextFound && (FindTextTest(hwnd, lpefr->fuFlags, &ttf, iPos + 1) >= 0));
+  UpdateFindIcon(bTextFound && CheckTextExists(hwnd, lpefr->fuFlags, &ttf, iPos + 1));
   if (!bTextFound && ttf.chrg.cpMin > 0 && !lpefr->bNoFindWrap && !fExtendSelection)
   {
     if (IDOK == InfoBox(MBOKCANCEL, L"MsgFindWrap1", IDS_FIND_WRAPFW))
     {
       ttf.chrg.cpMin = 0;
       iPos = FindTextImpl(hwnd, lpefr->fuFlags, &ttf);
-      UpdateFindIcon(iPos >= 0);
+      UpdateFindIcon((iPos >= 0) && CheckTextExists(hwnd, lpefr->fuFlags, &ttf, iPos + 1));
     }
     else
     {
@@ -5750,7 +5816,7 @@ BOOL EditFindPrev(HWND hwnd, LPCEDITFINDREPLACE lpefr, BOOL fExtendSelection)
   ttf.lpstrText = szFind2;
   iPos = FindTextImpl(hwnd, lpefr->fuFlags, &ttf);
   const BOOL bTextFound = (iPos >= 0);
-  UpdateFindIcon(bTextFound && (FindTextTest(hwnd, lpefr->fuFlags, &ttf, iPos - 1) >= 0));
+  UpdateFindIcon(bTextFound && CheckTextExists(hwnd, lpefr->fuFlags, &ttf, iPos - 1));
   iLength = (int)SendMessage(hwnd, SCI_GETLENGTH, 0, 0);
   if (!bTextFound && ttf.chrg.cpMin < iLength && !lpefr->bNoFindWrap && !fExtendSelection)
   {
@@ -5758,7 +5824,7 @@ BOOL EditFindPrev(HWND hwnd, LPCEDITFINDREPLACE lpefr, BOOL fExtendSelection)
     {
       ttf.chrg.cpMin = iLength;
       iPos = FindTextImpl(hwnd, lpefr->fuFlags, &ttf);
-      UpdateFindIcon(iPos >= 0);
+      UpdateFindIcon((iPos >= 0) && CheckTextExists(hwnd, lpefr->fuFlags, &ttf, iPos - 1));
     }
     else
     {
@@ -8008,7 +8074,7 @@ void HL_Unwrap_selection(HWND hwnd, BOOL quote_mode)
     SendMessage(hwnd, SCI_BEGINUNDOACTION, 0, 0);
     SendMessage(hwnd, SCI_DELETERANGE, pos_left - 1, 1);
     SendMessage(hwnd, SCI_DELETERANGE, pos_right - 1 /*remember offset from prev line*/, 1);
-    SendMessage(hwnd, SCI_SETSEL, pos_left - 1, pos_left - 1);
+    SendMessage(hwnd, SCI_SETSEL, pos_left - 1, pos_right - 1);
     SendMessage(hwnd, SCI_ENDUNDOACTION, 0, 0);
   }
   //
