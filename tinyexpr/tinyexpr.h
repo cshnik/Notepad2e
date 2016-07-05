@@ -58,6 +58,11 @@ typedef struct te_variable {
     void *context;
 } te_variable;
 
+typedef struct te_operator
+{
+  const char *name;
+  const void *address;
+} te_operator;
 
 
 /* Parses the input expression, evaluates it, and frees it. */

@@ -167,6 +167,50 @@ static double mul(double a, double b) {return a * b;}
 static double divide(double a, double b) {return a / b;}
 static double negate(double a) {return -a;}
 static double comma(double a, double b) {return b;}
+static double __not(double a) { return ~(int)a; }
+
+static double __div(double a, double b) { return (int)(a / b); }
+static double __shl(double a, double b) { return (int)a << (int)b; }
+static double __shr(double a, double b) { return (int)a >> (int)b; }
+static double __and(double a, double b) { return (int)a & (int)b; }
+static double __or(double a, double b) { return (int)a | (int)b; }
+static double __xor(double a, double b) { return (int)a ^ (int)b; }
+
+static const te_operator operators[] = {
+  { "div", __div },
+  { "shl", __shl },
+  { "shr", __shr },
+  { "and", __and },
+  { "or", __or },
+  { "xor", __xor },
+  { "not", __not, }
+};
+
+static const te_operator *find_operator(const char *name, int len)
+{
+  int i;
+  for (i = 0; i < _countof(operators); ++i)
+  {
+    if (strncmp(name, operators[i].name, len) == 0 && operators[i].name[len] == '\0')
+    {
+      return operators + i;
+    }
+  }
+  return 0;
+}
+
+static const te_operator *find_operator_by_function(const void* address)
+{
+  int i;
+  for (i = 0; i < _countof(operators); ++i)
+  {
+    if (operators[i].address == address)
+    {
+      return operators + i;
+    }
+  }
+  return 0;
+}
 
 
 void next_token(state *s) {
@@ -181,14 +225,41 @@ void next_token(state *s) {
 
         /* Try reading a number. */
         if ((s->next[0] >= '0' && s->next[0] <= '9') || s->next[0] == '.') {
+            const char *start = s->next;
             s->value = strtod(s->next, (char**)&s->next);
             s->type = TOK_NUMBER;
+            switch (s->next[0])
+            {
+            case 'b':
+              s->value = strtol(start, NULL, 2);
+              ++s->next;
+              break;
+            case 'o':
+              s->value = strtol(start, NULL, 8);
+              ++s->next;
+              break;
+            case 'd':
+              ++s->next;
+              break;
+            case 'h':
+              s->value = strtol(start, NULL, 16);
+              ++s->next;
+              break;
+            }
         } else {
             /* Look for a variable or builtin function call. */
             if (s->next[0] >= 'a' && s->next[0] <= 'z') {
                 const char *start;
                 start = s->next;
                 while ((s->next[0] >= 'a' && s->next[0] <= 'z') || (s->next[0] >= '0' && s->next[0] <= '9')) s->next++;
+
+                const te_operator *operator = find_operator(start, s->next - start);
+                if (operator)
+                {
+                  s->type = TOK_INFIX;
+                  s->function = operator->address;
+                  break;
+                }
 
                 const te_variable *var = find_lookup(s, start, s->next - start);
                 if (!var) var = find_builtin(start, s->next - start);
@@ -226,7 +297,7 @@ void next_token(state *s) {
                     case '%': s->type = TOK_INFIX; s->function = fmod; break;
                     case '(': s->type = TOK_OPEN; break;
                     case ')': s->type = TOK_CLOSE; break;
-                    case ',': s->type = TOK_SEP; break;
+                    //case ',': s->type = TOK_SEP; break;
                     case ' ': case '\t': case '\n': case '\r': break;
                     default: s->type = TOK_ERROR; break;
                 }
@@ -338,18 +409,27 @@ static te_expr *base(state *s) {
 static te_expr *power(state *s) {
     /* <power>     =    {("-" | "+")} <base> */
     int sign = 1;
-    while (s->type == TOK_INFIX && (s->function == add || s->function == sub)) {
+    while (s->type == TOK_INFIX && (s->function == add || s->function == sub || s->function == __not)) {
         if (s->function == sub) sign = -sign;
+        else if (s->function == __not) sign = 2;
         next_token(s);
     }
 
     te_expr *ret;
 
-    if (sign == 1) {
-        ret = base(s);
-    } else {
-        ret = NEW_EXPR(TE_FUNCTION1 | TE_FLAG_PURE, base(s));
-        ret->function = negate;
+    switch (sign)
+    {
+    case 1:
+      ret = base(s);
+      break;
+    case -1:
+      ret = NEW_EXPR(TE_FUNCTION1 | TE_FLAG_PURE, base(s));
+      ret->function = negate;
+      break;
+    case 2:
+      ret = NEW_EXPR(TE_FUNCTION1 | TE_FLAG_PURE, base(s));
+      ret->function = __not;
+      break;
     }
 
     return ret;
@@ -375,7 +455,8 @@ static te_expr *term(state *s) {
     /* <term>      =    <factor> {("*" | "/" | "%") <factor>} */
     te_expr *ret = factor(s);
 
-    while (s->type == TOK_INFIX && (s->function == mul || s->function == divide || s->function == fmod)) {
+    while (s->type == TOK_INFIX
+           && (s->function == mul || s->function == divide || s->function == fmod || find_operator_by_function(s->function))) {
         te_fun2 t = s->function;
         next_token(s);
         ret = NEW_EXPR(TE_FUNCTION2 | TE_FLAG_PURE, ret, factor(s));
