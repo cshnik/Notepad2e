@@ -997,7 +997,7 @@ EDITLEXER lexRUBY = { SCLEX_RUBY, 63022, L"Ruby Script", L"rb; ruby; rbw; rake; 
         { SCE_RB_CLASSNAME, 63246, L"Class name", L"fore:#0000FF", L"" },
         { SCE_RB_DEFNAME, 63247, L"Function name", L"fore:#007F7F", L"" },
         { SCE_RB_POD, 63314, L"POD", L"fore:#004000; back:#C0FFC0; eolfilled", L"" },
-        { SCE_RB_REGEX, 63315, L"Regex", L"fore:#000000; back:#A0FFA0", L"" },
+        { SCE_RB_REGEX, 63135, L"Regex", L"fore:#000000; back:#A0FFA0", L"" },
         { SCE_RB_SYMBOL, 63316, L"Symbol", L"fore:#C0A030", L"" },
         { SCE_RB_MODULE_NAME, 63317, L"Module name", L"fore:#A000A0", L"" },
         { SCE_RB_INSTANCE_VAR, 63318, L"Instance Var", L"fore:#B00080", L"" },
@@ -1036,16 +1036,16 @@ KEYWORDLIST KeyWords_BASH = {
     "", "", "", "", "", "", "", ""
 };
 
-EDITLEXER lexBASH = { SCLEX_BASH, 63023, L"Bash Script", L"sh; bash", L"", &KeyWords_BASH, {
+EDITLEXER lexBASH = { SCLEX_BASH, 63023, L"Bash Script", L"sh; bash; configure; ksh", L"", &KeyWords_BASH, {
         { STYLE_DEFAULT, 63126, L"Default", L"", L"" },
         //{ SCE_P_DEFAULT, L"Default", L"", L"" },
         { SCE_SH_DEFAULT, 63126, L"Default", L"fore:#808080", L"" },
-        { SCE_SH_ERROR, 63127, L"Error", L"fore:#FFFF00,back:#FF0000", L"" },
+        { SCE_SH_ERROR, 63325, L"Error", L"fore:#FFFF00,back:#FF0000", L"" },
         { SCE_SH_COMMENTLINE, 63127, L"Comment", L"fore:#007F00,font:Georgia", L"" },
         { SCE_SH_NUMBER, 63130, L"Number", L"fore:#007F7F", L"" },
         { SCE_SH_WORD, 63128, L"Keyword", L"fore:#00007F,bold", L"" },
         { SCE_SH_STRING, 63131, L"String", L"fore:#7F007F,font:Consolas", L"" },
-        { SCE_SH_CHARACTER, 63131, L"String", L"fore:#7F007F,font:Consolas", L"" },
+        { SCE_SH_CHARACTER, 63265, L"Char", L"fore:#7F007F,font:Consolas", L"" },
         { SCE_SH_OPERATOR, 63132, L"Operator", L"fore:#000000,bold", L"" },
         { SCE_SH_IDENTIFIER, 63129, L"Identifier", L"fore:#000000", L"" },
         { SCE_SH_SCALAR, 63215, L"Scalar $var", L"fore:#000000,back:#FFE0E0", L"" },
@@ -1055,6 +1055,592 @@ EDITLEXER lexBASH = { SCLEX_BASH, 63023, L"Bash Script", L"sh; bash", L"", &KeyW
         { SCE_SH_HERE_Q, 63224, L"Here-doc (single quoted, q)", L"fore:#7F007F,back:#DDD0DD,eolfilled,notbold", L"" },
         { -1, 00000, L"", L"", L"" }
     }
+};
+
+KEYWORDLIST KeyWords_ASN1 = {
+    "ACCESS AGENT AUGMENTS "
+    "BEGIN BITS "
+    "CAPABILITIES CHOICE COMPLIANCE CONTACT CONVENTION "
+    "DEFINITIONS DEFVAL DESCRIPTION DISPLAY "
+    "END ENTERPRISE EXPORTS "
+    "FALSE FROM "
+    "GROUP GROUPS "
+    "HINT "
+    "IDENTITY IMPLIED IMPORTS INCLUDES INDEX INFO "
+    "LAST "
+    "MANDATORY MAX MIN MODULE "
+    "NOTATION NOTIFICATION NULL "
+    "OBJECTS OBJECT-TYPE OF ORGANIZATION "
+    "PRODUCT "
+    "RELEASE REFERENCE REQUIRES REVISION "
+    "SEQUENCE SIZE STATUS SUPPORTS SYNTAX "
+    "TEXTUAL TRAP TYPE TRAP-TYPE "
+    "UPDATED "
+    "VALUE VARIABLES VARIATION "
+    "WRITE "
+    "accessible "
+    "create current "
+    "deprecated "
+    "for "
+    "mandatory "
+    "not notify not-accessible "
+    "obsolete only optional "
+    "read read-only read-write "
+    "write "
+    "ABSENT ANY APPLICATION "
+    "BIT BOOLEAN BY "
+    "COMPONENT COMPONENTS "
+    "DEFAULT DEFINED "
+    "ENUMERATED EXPLICIT EXTERNAL "
+    "IMPLICIT INIFINITY "
+    "MAX MIN MINUS "
+    "OPTIONAL "
+    "PRESENT PRIVATE "
+    "REAL "
+    "SET "
+    "TAGS TRUE "
+    "Counter Counter32 Counter64 "
+    "DisplayString "
+    "Gauge Gauge32 "
+    "IDENTIFIER INTEGER Integer32 IpAddress "
+    "NetworkAddress NsapAddress "
+    "OBJECT OCTET Opaque "
+    "PhysAddress "
+    "STRING "
+    "TimeTicks "
+    "UInteger32 UNITS Unsigned32",
+    "", "", "", "", "", "", "", ""
+};
+
+EDITLEXER lexASN1= { SCLEX_ASN1, 63024, L"ASN.1", L"mib", L"", &KeyWords_ASN1, {
+        { SCE_ASN1_DEFAULT, 63126, L"Default", L"fore:#000000", L"" },
+        { SCE_ASN1_COMMENT, 63127, L"Comment", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_ASN1_IDENTIFIER, 63129, L"Identifier", L"fore:#000000,bold", L"" },
+        { SCE_ASN1_STRING, 63131, L"String", L"fore:#7F007F", L"" },
+        { SCE_ASN1_OID, 63129, L"Identifier", L"fore:#007F7F,bold", L"" },
+        { SCE_ASN1_SCALAR, 63215, L"Scalar $var", L"fore:#7F0000", L"" },
+        { SCE_ASN1_KEYWORD, 63128, L"Keyword", L"fore:#00007F", L"" },
+        { SCE_ASN1_ATTRIBUTE, 63258, L"Attribute", L"fore:#F07800", L"" },
+        { SCE_ASN1_DESCRIPTOR, 63259, L"Descriptor", L"fore:#00007F", L"" },
+        { SCE_ASN1_TYPE, 63260, L"Type", L"fore:#00007F", L"" },
+        { SCE_ASN1_OPERATOR, 63132, L"Operator", L"fore:#00007F", L"" },
+        { -1, 00000, L"", L"", L"" }
+    }
+};
+
+KEYWORDLIST KeyWords_CAML = {
+    "and as assert asr begin class "
+    "constraint do done downto else end "
+    "exception external false for fun function "
+    "functor if in include inherit initializer "
+    "land lazy let lor lsl lsr "
+    "lxor match method mod module mutable "
+    "new object of open or private "
+    "rec sig struct then to true "
+    "try type val virtual when while "
+    "with ",
+    "option Some None ignore ref lnot succ pred parser ",
+    "array bool char float int list string unit",
+    "", "", "", "", "", ""
+};
+
+EDITLEXER lexCAML = { SCLEX_CAML, 63025, L"OCaml Source Code", L"ml; mli", L"", &KeyWords_CAML,{
+        { SCE_CAML_DEFAULT, 63126, L"Default", L"fore:#808080", L"" },
+        { SCE_CAML_IDENTIFIER, 63129, L"Identifier", L"", L"" },
+        { SCE_CAML_TAGNAME, 63261, L"Tag Name", L"fore:#000000,back:#ffe0ff", L"" },
+        { SCE_CAML_KEYWORD, 63128, L"Keyword", L"fore:#00007F,bold", L"" },
+        { SCE_CAML_KEYWORD2, 63262, L"Keyword 2", L"fore:#000000,back:#e0e0ff", L"" },
+        { SCE_CAML_KEYWORD3, 63263, L"Keyword 3", L"fore:#a0000,bold", L"" },
+        { SCE_CAML_LINENUM, 63264, L"Linenum", L"back:#C0C0C0", L"" },
+        { SCE_CAML_OPERATOR, 63132, L"Operator", L"fore:#000000,bold", L"" },
+        { SCE_CAML_NUMBER, 63130, L"Number", L"fore:#000000,back:#ffff00", L"" },
+        { SCE_CAML_CHAR, 63265, L"Char", L"fore:#000000,back:#ffff00", L"" },
+        { SCE_CAML_WHITE, 63266, L"Whitespace", L"fore:#000000,back:#e0e0e0", L"" },
+        { SCE_CAML_STRING, 63131, L"String", L"fore:#000000,back:#ffff00", L"" },
+        { SCE_CAML_COMMENT, 63127, L"Comment", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_CAML_COMMENT1, 63267, L"Comment 1", L"back:#E0EEFF,font:Georgia", L"" },
+        { SCE_CAML_COMMENT2, 63268, L"Comment 2", L"back:#E0EEFF,font:Georgia", L"" },
+        { SCE_CAML_COMMENT3, 63269, L"Comment 3", L"back:#E0EEFF,font:Georgia", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_COFFEESCRIPT = {
+      "", "", "", "", "", "", "", "", ""
+};
+
+EDITLEXER lexCOFFEESCRIPT = { SCLEX_COFFEESCRIPT, 63026, L"Coffee Script", L"coffee", L"", &KeyWords_COFFEESCRIPT,{
+        { SCE_COFFEESCRIPT_DEFAULT, 63126, L"Default", L"fore:#808080", L"" },
+        { SCE_COFFEESCRIPT_COMMENT, 63127, L"Comment", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_COFFEESCRIPT_COMMENTLINE, 63270, L"Comment Line", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_COFFEESCRIPT_COMMENTDOC, 63271, L"Comment Doc", L"fore:#3F703F,font:Georgia", L"" },
+        { SCE_COFFEESCRIPT_NUMBER, 63130, L"Number", L"fore:#007F7F", L"" },
+        { SCE_COFFEESCRIPT_WORD, 63128, L"Keyword", L"fore:#00007F,bold", L"" },
+        { SCE_COFFEESCRIPT_STRING, 63131, L"String", L"fore:#7F007F", L"" },
+        { SCE_COFFEESCRIPT_CHARACTER, 63265, L"Char", L"fore:#7F007F", L"" },
+        { SCE_COFFEESCRIPT_UUID, 63272, L"UUID", L"fore:#804080", L"" },
+        { SCE_COFFEESCRIPT_PREPROCESSOR, 63273, L"Preprocessor", L"fore:#7F7F00", L"" },
+        { SCE_COFFEESCRIPT_OPERATOR, 63132, L"Operator", L"fore:#000000,bold", L"" },
+        { SCE_COFFEESCRIPT_IDENTIFIER, 63129, L"Identifier", L"", L"" },
+        { SCE_COFFEESCRIPT_STRINGEOL, 63274, L"String EOL", L"fore:#000000,font:Consolas,back:#E0C0E0,eolfilled", L"" },
+        { SCE_COFFEESCRIPT_VERBATIM, 63275, L"Verbatim", L"fore:#007F00,font:Consolas,back:#E0FFE0,eolfilled", L"" },
+        { SCE_COFFEESCRIPT_REGEX, 63135, L"Regex", L"fore:#3F7F3F,font:Consolas,back:#E0F0FF,eolfilled", L"" },
+        { SCE_COFFEESCRIPT_COMMENTLINEDOC, 63276, L"Comment Line Doc", L"fore:#3F703F,font:Georgia", L"" },
+        { SCE_COFFEESCRIPT_WORD2, 63262, L"Keyword 2", L"fore:#B00040", L"" },
+        { SCE_COFFEESCRIPT_COMMENTDOCKEYWORD, 63277, L"Comment Doc Keyword", L"fore:#3060A0,font:Georgia", L"" },
+        { SCE_COFFEESCRIPT_COMMENTDOCKEYWORDERROR, 63278, L"Comment Doc Keyword Error", L"fore:#804020,font:Georgia", L"" },
+        { SCE_COFFEESCRIPT_GLOBALCLASS, 63279, L"Global Class", L"fore:#DD9900", L"" },
+        { SCE_COFFEESCRIPT_STRINGRAW, 63280, L"String Raw", L"fore:#7F007F,back:#FFF3FF,eolfilled", L"" },
+        { SCE_COFFEESCRIPT_TRIPLEVERBATIM, 63281, L"Trip Lever Batim", L"font:Consolas,fore:#007F00,back:#E0FFE0,eolfilled", L"" },
+        { SCE_COFFEESCRIPT_COMMENTBLOCK, 63282, L"Comment Block", L"font:Consolas,fore:#007F00,back:#E7FFD7,eolfilled", L"" },
+        { SCE_COFFEESCRIPT_VERBOSE_REGEX, 63283, L"Verbose Regex", L"fore:#659900", L"" },
+        { SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT, 63284, L"Regex Comment", L"fore:#3F703F", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_D = {
+    "abstract alias align asm assert auto "
+    "body bool break byte "
+    "case cast catch cdouble cent cfloat char class const continue creal "
+    "dchar debug default delegate delete deprecated do double "
+    "else enum export extern "
+    "false final finally float for foreach foreach_reverse function "
+    "goto "
+    "idouble if ifloat import in inout int interface invariant ireal is "
+    "lazy long "
+    "mixin module "
+    "new null "
+    "out override "
+    "package pragma private protected public "
+    "real return "
+    "scope short static struct super switch synchronized "
+    "template this throw true try typedef typeid typeof "
+    "ubyte ucent uint ulong union unittest ushort "
+    "version void volatile "
+    "wchar while with",
+    "",
+    "a addindex addtogroup anchor arg attention "
+    "author b brief bug c class code date def defgroup deprecated dontinclude "
+    "e em endcode endhtmlonly endif endlatexonly endlink endverbatim enum example exception "
+    "f$ f[ f] file fn hideinitializer htmlinclude htmlonly "
+    "if image include ingroup internal invariant interface latexonly li line link "
+    "mainpage name namespace nosubgrouping note overload "
+    "p page par param post pre ref relates remarks return retval "
+    "sa section see showinitializer since skip skipline struct subsection "
+    "test throw todo typedef union until "
+    "var verbatim verbinclude version warning weakgroup $ @ \\ & < > # { }",
+    "", "", "", "", "", ""
+};
+
+EDITLEXER lexD = { SCLEX_D, 63027, L"D Source Code", L"d", L"", &KeyWords_D,{
+        { SCE_D_DEFAULT, 63126, L"Default", L"fore:#808080", L"" },
+        { SCE_D_COMMENT, 63127, L"Comment", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_D_COMMENTLINE, 63270, L"Comment Line", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_D_COMMENTDOC, 63271, L"Comment Doc", L"fore:#3F703F,font:Georgia", L"" },
+        { SCE_D_COMMENTNESTED, 63286, L"Comment Nested", L"fore:#A0C0A0,font:Georgia", L"" },
+        { SCE_D_NUMBER, 63130, L"Number", L"fore:#007F7F", L"" },
+        { SCE_D_WORD, 63128, L"Keyword", L"fore:#00007F,bold", L"" },
+        { SCE_D_WORD2, 63262, L"Keyword 2", L"fore:#00007F,bold", L"" },
+        { SCE_D_WORD3, 63263, L"Keyword 3", L"fore:#00007F,bold", L"" },
+        { SCE_D_TYPEDEF, 63285, L"Typedef", L"fore:#00007F,bold", L"" },
+        { SCE_D_STRING, 63131, L"String", L"fore:#7F007F", L"" },
+        { SCE_D_STRINGEOL, 63274, L"String EOL", L"fore:#000000,font:Consolas,back:#E0C0E0,eolfilled", L"" },
+        { SCE_D_CHARACTER, 63265, L"Char", L"fore:#7F007F", L"" },
+        { SCE_D_OPERATOR, 63132, L"Operator", L"fore:#000000,bold", L"" },
+        { SCE_D_IDENTIFIER, 63129, L"Identifier", L"", L"" },
+        { SCE_D_COMMENTLINEDOC, 63276, L"Comment Line Doc", L"fore:#3F703F,font:Georgia", L"" },
+        { SCE_D_COMMENTDOCKEYWORD, 63277, L"Comment Doc Keyword", L"fore:#3060A0,font:Georgia", L"" },
+        { SCE_D_COMMENTDOCKEYWORDERROR, 63278, L"Comment Doc Keyword Error", L"fore:#804020,font:Georgia", L"" },
+        { SCE_D_STRINGB, 63287, L"String B", L"fore:#DD9900", L"" },
+        { SCE_D_STRINGR, 63288, L"String R", L"fore:#DD9900", L"" },
+        { SCE_D_WORD5, 63290, L"Keyword 5", L"fore:#DD9900", L"" },
+        { SCE_D_WORD6, 63291, L"Keyword 6", L"fore:#DD9900", L"" },
+        { SCE_D_WORD7, 63292, L"Keyword 7", L"fore:#DD9900", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_Lisp = {
+    "not defun + - * / = < > <= >= princ "
+    "eval apply funcall quote identity function complement backquote lambda set setq setf "
+    "defun defmacro gensym make symbol intern symbol name symbol value symbol plist get "
+    "getf putprop remprop hash make array aref car cdr caar cadr cdar cddr caaar caadr cadar "
+    "caddr cdaar cdadr cddar cdddr caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr "
+    "cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr cons list append reverse last nth "
+    "nthcdr member assoc subst sublis nsubst  nsublis remove length list length "
+    "mapc mapcar mapl maplist mapcan mapcon rplaca rplacd nconc delete atom symbolp numberp "
+    "boundp null listp consp minusp zerop plusp evenp oddp eq eql equal cond case and or let l if prog "
+    "prog1 prog2 progn go return do dolist dotimes catch throw error cerror break "
+    "continue errset baktrace evalhook truncate float rem min max abs sin cos tan expt exp sqrt "
+    "random logand logior logxor lognot bignums logeqv lognand lognor "
+    "logorc2 logtest logbitp logcount integer length nil",
+    "", "", "", "", "", "", "", ""
+};
+
+EDITLEXER lexLisp = { SCLEX_LISP, 63028, L"Lisp Source Code", L"lsp;lisp", L"", &KeyWords_Lisp,{
+        { SCE_LISP_DEFAULT, 63126, L"Default", L"fore:#808080", L"" },
+        { SCE_LISP_COMMENT, 63127, L"Comment", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_LISP_NUMBER, 63130, L"Number", L"fore:#007F7F", L"" },
+        { SCE_LISP_KEYWORD, 63128, L"Keyword", L"fore:#00007F,bold", L"" },
+        { SCE_LISP_KEYWORD_KW, 63262, L"Keyword 2", L"fore:#EE00AA", L"" },
+        { SCE_LISP_SYMBOL, 63294, L"Symbol", L"fore:#DD9900", L"" },
+        { SCE_LISP_STRING, 63131, L"String", L"fore:#7F007F", L"" },
+        { SCE_LISP_STRINGEOL, 63274, L"String EOL", L"fore:#000000,font:Verdana,back:#fefecc,eolfilled", L"" },
+        { SCE_LISP_IDENTIFIER, 63129, L"Identifier", L"", L"" },
+        { SCE_LISP_OPERATOR, 63132, L"Operator", L"fore:#000000,bold", L"" },
+        { SCE_LISP_SPECIAL, 63295, L"Special", L"fore:#60AA00", L"" },
+        { SCE_LISP_MULTI_COMMENT, 63296, L"Multi-line Comment", L"fore:#007F00,font:Georgia", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_Lua = {
+    "and break do else elseif "
+    "end for function if in "
+    "local nil not or repeat "
+    "return then until while false true goto",
+    "assert collectgarbage dofile error _G "
+    "getmetatable ipairs loadfile next pairs "
+    "pcall print rawequal rawget rawset "
+    "setmetatable tonumber tostring type _VERSION "
+    "xpcall string table math coroutine io os debug "
+    "getfenv gcinfo load loadlib loadstring "
+    "require select setfenv unpack "
+    "_LOADED LUA_PATH _REQUIREDNAME "
+    "package rawlen package bit32 utf8 _ENV",
+    "string.byte string.char string.dump string.find string.format "
+    "string.gsub string.len string.lower string.rep string.sub string.upper "
+    "table.concat table.insert table.remove table.sort "
+    "math.abs math.acos math.asin math.atan math.atan2 "
+    "math.ceil math.cos math.deg math.exp math.floor "
+    "math.frexp math.ldexp math.log math.max math.min "
+    "math.pi math.pow math.rad math.random math.randomseed "
+    "math.sin math.sqrt math.tan "
+    "string.gfind string.gmatch string.match string.reverse "
+    "string.pack string.packsize string.unpack "
+    "table.foreach table.foreachi table.getn table.setn "
+    "table.maxn table.pack table.unpack table.move "
+    "math.cosh math.fmod math.huge math.log10 math.modf "
+    "math.mod math.sinh math.tanh math.maxinteger math.mininteger "
+    "math.tointeger math.type math.ult "
+    "bit32.arshift bit32.band bit32.bnot bit32.bor bit32.btest "
+    "bit32.bxor bit32.extract bit32.replace bit32.lrotate bit32.lshift "
+    "bit32.rrotate bit32.rshift "
+    "utf8.char utf8.charpattern utf8.codes "
+    "utf8.codepoint utf8.len utf8.offset",
+    "coroutine.create coroutine.resume coroutine.status coroutine.wrap coroutine.yield "
+    "io.close io.flush io.input io.lines io.open "
+    "io.output io.read io.tmpfile io.type io.write "
+    "io.stdin io.stdout io.stderr "
+    "os.clock os.date os.difftime os.execute os.exit "
+    "os.getenv os.remove os.rename os.setlocale os.time "
+    "os.tmpname "
+    "coroutine.isyieldable coroutine.running io.popen "
+    "module package.loaders package.seeall "
+    "package.config package.searchers package.searchpath "
+    "require package.cpath package.loaded "
+    "package.loadlib package.path package.preload",
+    "", "", "", "", ""
+};
+
+EDITLEXER lexLua = { SCLEX_LUA, 63029, L"Lua Source Code", L"lua", L"", &KeyWords_Lua,{
+        { SCE_LUA_DEFAULT, 63126, L"Default", L"fore:#FF0000", L"" },
+        { SCE_LUA_COMMENT, 63127, L"Comment", L"fore:#007F00,font:Georgia,back:#D0F0F0,eolfilled", L"" },
+        { SCE_LUA_COMMENTLINE, 63270, L"Comment Line", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_LUA_COMMENTDOC, 63271, L"Comment Doc", L"back:#FF0000", L"" },
+        { SCE_LUA_NUMBER, 63130, L"Number", L"fore:#007F7F", L"" },
+        { SCE_LUA_WORD, 63128, L"Keyword", L"fore:#00007F", L"" },
+        { SCE_LUA_STRING, 63131, L"String", L"fore:#7F007F", L"" },
+        { SCE_LUA_CHARACTER, 63265, L"Char", L"fore:#7F007F", L"" },
+        { SCE_LUA_LITERALSTRING, 63295, L"Literal String", L"fore:#7F007F,font:Georgia,back:#E0FFFF", L"" },
+        { SCE_LUA_PREPROCESSOR, 63133, L"Preprocessor", L"fore:#7F7F00", L"" },
+        { SCE_LUA_OPERATOR, 63132, L"Operator", L"fore:#000000", L"" },
+        { SCE_LUA_IDENTIFIER, 63129, L"Identifier", L"", L"" },
+        { SCE_LUA_STRINGEOL, 63274, L"String EOL", L"back:#E0C0E0,eolfilled", L"" },
+        { SCE_LUA_WORD2, 63262, L"Keyword 2", L"fore:#00007F,back:#F5FFF5", L"" },
+        { SCE_LUA_WORD3, 63263, L"Keyword 3", L"fore:#00007F,back:#F5F5FF", L"" },
+        { SCE_LUA_WORD4, 63289, L"Keyword 4", L"fore:#00007F,back:#FFF5F5", L"" },
+        { SCE_LUA_WORD5, 63290, L"Keyword 5", L"fore:#00007F,back:#FFF5FF", L"" },
+        { SCE_LUA_WORD6, 63291, L"Keyword 6", L"fore:#00007F,back:#FFFFF5", L"" },
+        { SCE_LUA_WORD7, 63292, L"Keyword 7", L"fore:#00007F,back:#FFA0A0", L"" },
+        { SCE_LUA_WORD8, 63293, L"Keyword 8", L"fore:#00007F,back:#FFF5F5", L"" },
+        { SCE_LUA_LABEL, 63235, L"Label", L"fore:#7F7F00", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_NSIS = {
+    "!addincludedir !addplugindir MakeNSIS Portions "
+    "Contributors: Abort AddBrandingImage AddSize AutoCloseWindow BGFont "
+    "BGGradient BrandingText BringToFront Call CallInstDLL Caption ChangeUI "
+    "ClearErrors ComponentText GetDLLVersion GetDLLVersionLocal GetFileTime "
+    "GetFileTimeLocal CopyFiles CRCCheck CreateDirectory CreateFont CreateShortCut "
+    "SetDatablockOptimize DeleteINISec DeleteINIStr DeleteRegKey DeleteRegValue "
+    "Delete DetailPrint DirText DirShow DirVar DirVerify GetInstDirError AllowRootDirInstall "
+    "CheckBitmap EnableWindow EnumRegKey EnumRegValue Exch Exec ExecWait "
+    "ExecShell ExpandEnvStrings FindWindow FindClose FindFirst FindNext File FileBufSize "
+    "FlushINI ReserveFile FileClose FileErrorText FileOpen FileRead FileWrite FileReadByte "
+    "FileWriteByte FileSeek Function FunctionEnd GetDlgItem GetFullPathName "
+    "GetTempFileName HideWindow Icon IfAbort IfErrors IfFileExists IfRebootFlag IfSilent "
+    "InstallDirRegKey InstallColors InstallDir InstProgressFlags InstType IntOp IntCmp "
+    "IntCmpU IntFmt IsWindow Goto LangString LangStringUP LicenseData "
+    "LicenseForceSelection LicenseLangString LicenseText LicenseBkColor "
+    "LoadLanguageFile LogSet LogText MessageBox Nop Name OutFile Page "
+    "PageCallbacks PageEx PageExEnd Pop Push Quit ReadINIStr ReadRegDWORD "
+    "ReadRegStr ReadEnvStr Reboot RegDLL Rename Return RMDir Section SectionEnd "
+    "SectionIn SubSection SectionGroup SubSectionEnd SectionGroupEnd SearchPath "
+    "SectionSetFlags SectionGetFlags SectionSetInstTypes SectionGetInstTypes "
+    "SectionGetText SectionSetText SectionGetSize SectionSetSize GetCurInstType "
+    "SetCurInstType InstTypeSetText InstTypeGetText SendMessage SetAutoClose "
+    "SetCtlColors SetBrandingImage SetCompress SetCompressor SetCompressorDictSize "
+    "SetCompressionLevel SetDateSave SetDetailsView SetDetailsPrint SetErrors "
+    "SetErrorLevel GetErrorLevel SetFileAttributes SetFont SetOutPath SetOverwrite "
+    "SetPluginUnload SetRebootFlag SetShellVarContext SetSilent ShowInstDetails "
+    "ShowUninstDetails ShowWindow SilentInstall SilentUnInstall Sleep StrCmp StrCpy "
+    "StrLen SubCaption UninstallExeName UninstallCaption UninstallIcon UninstPage "
+    "UninstallText UninstallSubCaption UnRegDLL WindowIcon WriteINIStr WriteRegBin "
+    "WriteRegDWORD WriteRegStr WriteRegExpandStr WriteUninstaller XPStyle !packhdr "
+    "!system !execute !AddIncludeDir !include !cd !ifdef !ifndef !endif !define !undef !else !echo !warning "
+    "!error !verbose !macro !macroend !insertmacro !ifmacrodef !ifmacrondef MiscButtonText "
+    "DetailsButtonText UninstallButtonText InstallButtonText SpaceTexts "
+    "CompletedText GetFunctionAddress GetLabelAddress GetCurrentAddress "
+    "!AddPluginDir InitPluginsDir AllowSkipFiles Var VIAddVersionKey VIProductVersion LockWindow",
+    "$0 $1 $2 $3 $4 $5 $6 $7 $8 $9 "
+    "$R0 $R1 $R2 $R3 $R4 $R5 $R6 $R7 $R8 $R9 $\\t $\\\" $\\' $\\` "
+    "$VARNAME $0, $INSTDIR $OUTDIR $CMDLINE $LANGUAGE $PROGRAMFILES "
+    "$COMMONFILES $DESKTOP $EXEDIR ${NSISDIR} $WINDIR $SYSDIR $TEMP "
+    "$STARTMENU $SMPROGRAMS $SMSTARTUP $QUICKLAUNCH $DOCUMENTS "
+    "$SENDTO $RECENT $FAVORITES $MUSIC $PICTURES $VIDEOS $NETHOOD "
+    "$FONTS $TEMPLATES $APPDATA $PRINTHOOD $INTERNET_CACHE $COOKIES "
+    "$HISTORY $PROFILE $ADMINTOOLS $RESOURCES $RESOURCES_LOCALIZED "
+    "$CDBURN_AREA $HWNDPARENT $PLUGINSDIR $$ $\\r $\\n",
+    "ARCHIVE FILE_ATTRIBUTE_ARCHIVE FILE_ATTRIBUTE_HIDDEN "
+    "FILE_ATTRIBUTE_NORMAL FILE_ATTRIBUTE_OFFLINE FILE_ATTRIBUTE_READONLY "
+    "FILE_ATTRIBUTE_SYSTEM FILE_ATTRIBUTE_TEMPORARY HIDDEN HKCC HKCR HKCU "
+    "HKDD HKEY_CLASSES_ROOT HKEY_CURRENT_CONFIG HKEY_CURRENT_USER HKEY_DYN_DATA "
+    "HKEY_LOCAL_MACHINE HKEY_PERFORMANCE_DATA HKEY_USERS HKLM HKPD HKU IDABORT "
+    "IDCANCEL IDIGNORE IDNO IDOK IDRETRY IDYES MB_ABORTRETRYIGNORE MB_DEFBUTTON1 "
+    "MB_DEFBUTTON2 MB_DEFBUTTON3 MB_DEFBUTTON4 MB_ICONEXCLAMATION "
+    "MB_ICONINFORMATION MB_ICONQUESTION MB_ICONSTOP MB_OK MB_OKCANCEL "
+    "MB_RETRYCANCEL MB_RIGHT MB_SETFOREGROUND MB_TOPMOST MB_YESNO "
+    "MB_YESNOCANCEL NORMAL OFFLINE READONLY SW_SHOWMAXIMIZED SW_SHOWMINIMIZED "
+    "SW_SHOWNORMAL SYSTEM TEMPORARY auto colored false force hide ifnewer nevershow "
+    "normal off on show silent silentlog smooth true try lzma zlib bzip2 none listonly textonly "
+    "both top left bottom right license components directory instfiles uninstConfirm custom "
+    "all leave current ifdiff lastused LEFT RIGHT CENTER dlg_id ALT CONTROL EXT SHIFT "
+    "open print manual alwaysoff",
+    "", "", "", "", "", ""
+};
+
+EDITLEXER lexNSIS = { SCLEX_NSIS, 63030, L"NSIS Script", L"nsi;nsh", L"", &KeyWords_NSIS,{
+        { SCE_NSIS_DEFAULT, 63126, L"Default", L"fore:#000000,font:Verdana", L"" },
+        { SCE_NSIS_COMMENT, 63127, L"Comment", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_NSIS_STRINGDQ, 63211, L"String double quoted", L"fore:#999999,back:#EEEEEE", L"" },
+        { SCE_NSIS_STRINGLQ, 63298, L"String left quote", L"fore:#999999,back:#EEEEEE", L"" },
+        { SCE_NSIS_STRINGRQ, 63299, L"String right quote", L"fore:#999999,back:#EEEEEE", L"" },
+        { SCE_NSIS_FUNCTION, 63247, L"Function name", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_VARIABLE, 63249, L"Variable", L"fore:#CC3300", L"" },
+        { SCE_NSIS_LABEL, 63235, L"Label", L"fore:#FF9900", L"" },
+        { SCE_NSIS_USERDEFINED, 63300, L"User defined", L"fore:#000000", L"" },
+        { SCE_NSIS_SECTIONDEF, 63232, L"Section", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_SUBSECTIONDEF, 63301, L"Subsection", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_IFDEFINEDEF, 63302, L"If def", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_MACRODEF, 63303, L"Macro def", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_STRINGVAR, 63304, L"Variable within string", L"fore:#CC3300,back:#EEEEEE", L"" },
+        { SCE_NSIS_NUMBER, 63130, L"Number", L"fore:#007F7F", L"" },
+        { SCE_NSIS_SECTIONGROUP, 63305, L"Section Group", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_PAGEEX, 63306, L"Page Ex", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_FUNCTIONDEF, 63307, L"Function Definition", L"fore:#00007F,bold", L"" },
+        { SCE_NSIS_COMMENTBOX, 63308, L"Comment Box", L"fore:#007F00,font:Georgia,bold", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_TeX = {
+    "above abovedisplayshortskip abovedisplayskip "
+    "abovewithdelims accent adjdemerits advance afterassignment "
+    "aftergroup atop atopwithdelims "
+    "badness baselineskip batchmode begingroup "
+    "belowdisplayshortskip belowdisplayskip binoppenalty botmark "
+    "box boxmaxdepth brokenpenalty "
+    "catcode char chardef cleaders closein closeout clubpenalty "
+    "copy count countdef cr crcr csname "
+    "day deadcycles def defaulthyphenchar defaultskewchar "
+    "delcode delimiter delimiterfactor delimeters "
+    "delimitershortfall delimeters dimen dimendef discretionary "
+    "displayindent displaylimits displaystyle "
+    "displaywidowpenalty displaywidth divide "
+    "doublehyphendemerits dp dump "
+    "edef else emergencystretch end endcsname endgroup endinput "
+    "endlinechar eqno errhelp errmessage errorcontextlines "
+    "errorstopmode escapechar everycr everydisplay everyhbox "
+    "everyjob everymath everypar everyvbox exhyphenpenalty "
+    "expandafter "
+    "fam fi finalhyphendemerits firstmark floatingpenalty font "
+    "fontdimen fontname futurelet "
+    "gdef global group globaldefs "
+    "halign hangafter hangindent hbadness hbox hfil horizontal "
+    "hfill horizontal hfilneg hfuzz hoffset holdinginserts hrule "
+    "hsize hskip hss horizontal ht hyphenation hyphenchar "
+    "hyphenpenalty hyphen "
+    "if ifcase ifcat ifdim ifeof iffalse ifhbox ifhmode ifinner "
+    "ifmmode ifnum ifodd iftrue ifvbox ifvmode ifvoid ifx "
+    "ignorespaces immediate indent input inputlineno "
+    "insert insertpenalties interlinepenalty "
+    "jobname "
+    "kern "
+    "language lastbox lastkern lastpenalty lastskip lccode "
+    "leaders left lefthyphenmin leftskip leqno let limits "
+    "linepenalty line lineskip lineskiplimit long looseness "
+    "lower lowercase "
+    "mag mark mathaccent mathbin mathchar mathchardef mathchoice "
+    "mathclose mathcode mathinner mathop mathopen mathord "
+    "mathpunct mathrel mathsurround maxdeadcycles maxdepth "
+    "meaning medmuskip message mkern month moveleft moveright "
+    "mskip multiply muskip muskipdef "
+    "newlinechar noalign noboundary noexpand noindent nolimits "
+    "nonscript scriptscript nonstopmode nulldelimiterspace "
+    "nullfont number "
+    "omit openin openout or outer output outputpenalty over "
+    "overfullrule overline overwithdelims "
+    "pagedepth pagefilllstretch pagefillstretch pagefilstretch "
+    "pagegoal pageshrink pagestretch pagetotal par parfillskip "
+    "parindent parshape parskip patterns pausing penalty "
+    "postdisplaypenalty predisplaypenalty predisplaysize "
+    "pretolerance prevdepth prevgraf "
+    "radical raise read relax relpenalty right righthyphenmin "
+    "rightskip romannumeral "
+    "scriptfont scriptscriptfont scriptscriptstyle scriptspace "
+    "scriptstyle scrollmode setbox setlanguage sfcode shipout "
+    "show showbox showboxbreadth showboxdepth showlists showthe "
+    "skewchar skip skipdef spacefactor spaceskip span special "
+    "splitbotmark splitfirstmark splitmaxdepth splittopskip "
+    "string "
+    "tabskip textfont textstyle the thickmuskip thinmuskip time "
+    "toks toksdef tolerance topmark topskip tracingcommands "
+    "tracinglostchars tracingmacros tracingonline tracingoutput "
+    "tracingpages tracingparagraphs tracingrestores tracingstats "
+    "uccode uchyph underline unhbox unhcopy unkern unpenalty "
+    "unskip unvbox unvcopy uppercase "
+    "vadjust valign vbadness vbox vcenter vfil vfill vfilneg "
+    "vfuzz voffset vrule vsize vskip vsplit vss vtop "
+    "wd widowpenalty write "
+    "xdef xleaders xspaceskip "
+    "year "
+    "TeX "
+    "bgroup egroup endgraf space empty null "
+    "newcount newdimen newskip newmuskip newbox newtoks newhelp newread newwrite newfam newlanguage newinsert newif "
+    "maxdimen magstephalf magstep "
+    "frenchspacing nonfrenchspacing normalbaselines obeylines obeyspaces raggedright ttraggedright "
+    "thinspace negthinspace enspace enskip quad qquad "
+    "smallskip medskip bigskip removelastskip topglue vglue hglue "
+    "break nobreak allowbreak filbreak goodbreak smallbreak medbreak bigbreak "
+    "line leftline rightline centerline rlap llap underbar strutbox strut "
+    "cases matrix pmatrix bordermatrix eqalign displaylines eqalignno leqalignno "
+    "pageno folio tracingall showhyphens fmtname fmtversion "
+    "hphantom vphantom phantom smash",
+    "", "", "", "", "", "", "", ""
+};
+
+EDITLEXER lexTeX = { SCLEX_TEX, 63031, L"TeX Source Code", L"tex;sty", L"", &KeyWords_TeX,{
+        { SCE_TEX_DEFAULT, 63126, L"Default", L"fore:#3F3F3F", L"" },
+        { SCE_TEX_SPECIAL, 63295, L"Special", L"fore:#007F7F", L"" },
+        { SCE_TEX_GROUP, 63321, L"Group", L"fore:#7F0000", L"" },
+        { SCE_TEX_SYMBOL, 63316, L"Symbol", L"fore:#7F7F00", L"" },
+        { SCE_TEX_COMMAND, 63236, L"Command", L"fore:#007F00", L"" },
+        { SCE_TEX_TEXT, 63322, L"Text", L"", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_Yaml = {
+    "true false yes no",
+    "", "", "", "", "", "", "", ""
+};
+
+EDITLEXER lexYaml = { SCLEX_YAML, 63032, L"YAML Source Code", L"yaml;yml", L"", &KeyWords_Yaml,{
+        { SCE_YAML_DEFAULT, 63126, L"Default", L"font:Times New Roman,fore:#000000", L"" },
+        { SCE_YAML_COMMENT, 63127, L"Comment", L"font:Georgia,fore:#008800", L"" },
+        { SCE_YAML_IDENTIFIER, 63129, L"Identifier", L"font:Verdana,fore:#000088,bold", L"" },
+        { SCE_YAML_KEYWORD, 63128, L"Keyword", L"font:Verdana,fore:#880088", L"" },
+        { SCE_YAML_NUMBER, 63130, L"Number", L"font:Verdana,fore:#880000", L"" },
+        { SCE_YAML_REFERENCE, 63323, L"Reference", L"font:Verdana,fore:#008888", L"" },
+        { SCE_YAML_DOCUMENT, 63324, L"Document", L"font:Georgia,fore:#FFFFFF,bold,back:#000088,eolfilled", L"" },
+        { SCE_YAML_TEXT, 63322, L"Text", L"font:Times New Roman,fore:#333366", L"" },
+        { SCE_YAML_ERROR, 63325, L"Error", L"font:Times New Roman,fore:#FFFFFF,italics,bold,back:#FF0000,eolfilled", L"" },
+        { SCE_YAML_OPERATOR, 63132, L"Operator", L"fore:#000000", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_Rust = {
+  "alignof as be box break const continue crate do else enum extern false fn "
+  "for if impl in let loop match mod mut offsetof once priv proc pub pure ref "
+  "return self sizeof static struct super trait true type typeof unsafe unsized use virtual while yield",
+  "bool char f32 f64 i16 i32 i64 i8 int str u16 u32 u64 u8 uint",
+  "Self",
+  "", "", "", "", "", ""
+};
+
+EDITLEXER lexRust = { SCLEX_RUST, 63033, L"Rust Source Code", L"rs", L"", &KeyWords_Rust,{
+        { SCE_RUST_DEFAULT, 63126, L"Default", L"fore:#808080", L"" },
+        { SCE_RUST_COMMENTBLOCK, 63282, L"Comment Block", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_RUST_COMMENTLINE, 63270, L"Comment Line", L"fore:#007F00,font:Georgia", L"" },
+        { SCE_RUST_COMMENTBLOCKDOC, 63326, L"Comment Block Dock", L"fore:#3F703F,font:Georgia", L"" },
+        { SCE_RUST_COMMENTLINEDOC, 63276, L"Comment Line Doc", L"fore:#3F703F,font:Georgia", L"" },
+        { SCE_RUST_NUMBER, 63130, L"Number", L"fore:#007F7F", L"" },
+        { SCE_RUST_WORD, 63128, L"Keyword", L"fore:#00007F,bold", L"" },
+        { SCE_RUST_WORD2, 63262, L"Keyword 2", L"fore:#00007F,bold", L"" },
+        { SCE_RUST_WORD3, 63263, L"Keyword 3", L"fore:#00007F", L"" },
+        { SCE_RUST_WORD4, 63289, L"Keyword 4", L"fore:#00007F,bold", L"" },
+        { SCE_RUST_WORD5, 63290, L"Keyword 5", L"fore:#00007F,bold", L"" },
+        { SCE_RUST_WORD6, 63291, L"Keyword 6", L"fore:#00007F,bold", L"" },
+        { SCE_RUST_WORD7, 63292, L"Keyword 7", L"fore:#00007F,bold", L"" },
+        { SCE_RUST_STRING, 63131, L"String", L"fore:#7F007F", L"" },
+        { SCE_RUST_STRINGR, 63288, L"String R", L"fore:#B090B0", L"" },
+        { SCE_RUST_CHARACTER, 63265, L"Char", L"fore:#7F007F", L"" },
+        { SCE_RUST_OPERATOR, 63132, L"Operator", L"fore:#000000,bold", L"" },
+        { SCE_RUST_IDENTIFIER, 63129, L"Identifier", L"", L"" },
+        { SCE_RUST_LIFETIME, 63327, L"Lifetime", L"fore:#007F7F", L"" },
+        { SCE_RUST_MACRO, 63303, L"Macro def", L"fore:#7F7F00", L"" },
+        { SCE_RUST_LEXERROR, 63325, L"Error", L"fore:#000000,font:Consolas,back:#E0C0E0", L"" },
+        { SCE_RUST_BYTESTRING, 63328, L"Byte String", L"fore:#7F007F", L"" },
+        { SCE_RUST_BYTESTRINGR, 63329, L"Byte String R", L"fore:#B090B0", L"" },
+        { SCE_RUST_BYTECHARACTER, 63330, L"Byte Char", L"fore:#7F007F", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
+};
+
+KEYWORDLIST KeyWords_Markdown = {
+    "", "", "", "", "", "", "", "", ""
+};
+
+EDITLEXER lexMarkdown = { SCLEX_MARKDOWN, 63034, L"Markdown Source Code", L"markdown;mdown;mkdn;md;mkd;mdwn;mdtxt;mdtext", L"", &KeyWords_Markdown,{
+        { SCE_MARKDOWN_DEFAULT, 63126, L"Default", L"", L"" },
+        { SCE_MARKDOWN_LINE_BEGIN, 63331, L"Line Begin", L"fore:#CC00FF", L"" },
+        { SCE_MARKDOWN_STRONG1, 63332, L"Strong", L"fore:#DDBB99,bold", L"" },
+        { SCE_MARKDOWN_STRONG2, 63333, L"Strong 2", L"fore:#CC00FF", L"" },
+        { SCE_MARKDOWN_EM1, 63334, L"EM1", L"fore:#CC00FF,italics", L"" },
+        { SCE_MARKDOWN_EM2, 63335, L"EM2", L"fore:#9999FF,italics", L"" },
+        { SCE_MARKDOWN_HEADER1, 63336, L"Header 1", L"fore:#0088FF,bold", L"" },
+        { SCE_MARKDOWN_HEADER2, 63337, L"Header 2", L"fore:#2299FF,bold", L"" },
+        { SCE_MARKDOWN_HEADER3, 63338, L"Header 3", L"fore:#44AAFF,bold", L"" },
+        { SCE_MARKDOWN_HEADER4, 63339, L"Header 4", L"fore:#CC00FF,bold", L"" },
+        { SCE_MARKDOWN_HEADER5, 63340, L"Header 5", L"fore:#CC00FF,bold", L"" },
+        { SCE_MARKDOWN_HEADER6, 63341, L"Header 6", L"fore:#CC00FF,bold", L"" },
+        { SCE_MARKDOWN_PRECHAR, 63342, L"Prechar", L"fore:#000000", L"" },
+        { SCE_MARKDOWN_ULIST_ITEM, 63343, L"UList Item", L"fore:#CC33FF", L"" },
+        { SCE_MARKDOWN_OLIST_ITEM, 63344, L"OList Item", L"fore:#CC00FF", L"" },
+        { SCE_MARKDOWN_BLOCKQUOTE, 63345, L"Block Quote", L"fore:#CC00FF", L"" },
+        { SCE_MARKDOWN_STRIKEOUT, 63346, L"Strike Out", L"", L"" },
+        { SCE_MARKDOWN_HRULE, 63347, L"HRule", L"fore:#CC00FF", L"" },
+        { SCE_MARKDOWN_LINK, 63348, L"Link", L"fore:#FF5555", L"" },
+        { SCE_MARKDOWN_CODE, 63349, L"Code", L"fore:#80FF80,font:Consolas,back:#100010", L"" },
+        { SCE_MARKDOWN_CODE2, 63350, L"Code 2", L"fore:#CC00FF", L"" },
+        { SCE_MARKDOWN_CODEBK, 63351, L"Code Block", L"fore:#CC00FF", L"" },
+        { -1, 00000, L"", L"", L"" }
+      }
 };
 
 // This array holds all the lexers...
@@ -1082,7 +1668,18 @@ PEDITLEXER pLexArray[NUMLEXERS] = {
     &lexBAT,
     &lexDIFF,
     &lexRUBY,
-    &lexBASH
+    &lexBASH,
+    &lexASN1,
+    &lexCAML,
+    &lexCOFFEESCRIPT,
+    &lexD,
+    &lexLisp,
+    &lexLua,
+    &lexNSIS,
+    &lexTeX,
+    &lexYaml,
+    &lexRust,
+    &lexMarkdown
 };
 
 // Currently used lexer

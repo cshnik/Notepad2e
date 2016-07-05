@@ -25,6 +25,7 @@
 #include <shellapi.h>
 #include <commdlg.h>
 #include <locale.h>
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -38,6 +39,7 @@
 #include "resource.h"
 #include "SciCall.h"
 #include "HLSelection.h"
+#include "../tinyexpr/tinyexpr.h"
 
 VOID HL_Msg_create();
 
@@ -321,7 +323,7 @@ int flagDisplayHelp = 0;
 //
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
-  setlocale(LC_ALL, L"");
+  setlocale(LC_ALL, "");
 
   MSG msg;
   HWND hwnd;
@@ -4809,8 +4811,8 @@ LRESULT MsgNotify(HWND hwnd, WPARAM wParam, LPARAM lParam)
           break;
         case SCN_CARETMOVED:
           {
-            int iSelPos = SendMessage(hwndEdit, SCI_GETCURRENTPOS, 0, 0);
-            int iSelAnchor = SendMessage(hwndEdit, SCI_GETANCHOR, 0, 0);
+            const int iSelPos = SendMessage(hwndEdit, SCI_GETCURRENTPOS, 0, 0);
+            const int iSelAnchor = SendMessage(hwndEdit, SCI_GETANCHOR, 0, 0);
             EditSelectEx(hwndEdit, iSelAnchor, iSelPos);
           }
           break;
@@ -6233,9 +6235,31 @@ void UpdateStatusbar()
   {
     FormatString(tchDocPos, COUNTOF(tchDocPos), IDS_DOCPOS2, tchLn, tchLines, tchCol, tchCols, tchSel);
   }
-  iBytes = (int)SendMessage(hwndEdit, SCI_GETLENGTH, 0, 0);
-  StrFormatByteSize(iBytes, tchBytes, COUNTOF(tchBytes));
-  FormatString(tchDocSize, COUNTOF(tchDocSize), IDS_DOCSIZE, tchBytes);
+  
+  BOOL docSizeOK = FALSE;
+  const int iSelCount =
+    (int)SendMessage(hwndEdit, SCI_GETSELECTIONEND, 0, 0) -
+    (int)SendMessage(hwndEdit, SCI_GETSELECTIONSTART, 0, 0);
+  if (iSelCount > 0)
+  {
+    char *pszText = LocalAlloc(LPTR, iSelCount + 1);
+    SendMessage(hwndEdit, SCI_GETSELTEXT, 0, (LPARAM)pszText);
+    int error = 0;
+    const double exprValue = te_interp(pszText, &error);
+    if ((error == 0) && !isnan(exprValue))
+    {
+      FormatString(tchDocSize, COUNTOF(tchDocSize), IDS_EXPRESSION_VALUE, exprValue);
+      docSizeOK = TRUE;
+    }
+
+    LocalFree(pszText);
+  }
+  if (!docSizeOK)
+  {
+    iBytes = (int)SendMessage(hwndEdit, SCI_GETLENGTH, 0, 0);
+    StrFormatByteSize(iBytes, tchBytes, COUNTOF(tchBytes));
+    FormatString(tchDocSize, COUNTOF(tchDocSize), IDS_DOCSIZE, tchBytes);
+  }
   Encoding_GetLabel(iEncoding);
   if (iEOLMode == SC_EOL_CR)
   {
